@@ -1,0 +1,322 @@
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;">TikTok Risk Platform Teen Privacy 面试备忘卡 v2，含所有知识点</h2>
+<style>
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:10px}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500;margin-bottom:8px;margin-right:3px}
+.tb{background:#E6F1FB;color:#0C447C}
+.tt{background:#E1F5EE;color:#085041}
+.ta{background:#FAEEDA;color:#633806}
+.tr{background:#FCEBEB;color:#791F1F}
+.tp{background:#EEEDFE;color:#3C3489}
+.tg{background:#EAF3DE;color:#27500A}
+.tc{background:#FAECE7;color:#712B13}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.row3{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:10px}
+.row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.it{font-size:12px;color:var(--color-text-secondary);padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.6}
+.it:last-child{border-bottom:none}
+.hl{color:var(--color-text-primary);font-weight:500}
+.sc{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:8px 0 5px;padding-bottom:4px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;text-align:center}
+.sn{font-size:16px;font-weight:500;margin:0;color:var(--color-text-primary)}
+.sl{font-size:10px;color:var(--color-text-secondary);margin:2px 0 0}
+.badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:var(--border-radius-md);font-weight:500;margin-right:3px}
+.b0{background:#FCEBEB;color:#791F1F}
+.b1{background:#FAEEDA;color:#633806}
+.b2{background:#E1F5EE;color:#085041}
+.b3{background:#E6F1FB;color:#0C447C}
+.b4{background:#EAF3DE;color:#27500A}
+</style>
+
+<div style="padding:1rem 0;">
+
+<div class="card">
+  <span class="tag tb">案例分析万能框架</span>
+  <div class="row3">
+    <div><p style="font-size:11px;color:var(--color-text-secondary);margin:0 0 3px">60秒口诀</p><p style="font-size:13px;font-weight:500;color:#0C447C;margin:0">问题→指标→方法→实验→决策</p></div>
+    <div>
+      <div class="it"><span class="hl">Step 1</span> 澄清：年龄段？监管？数据范围？</div>
+      <div class="it"><span class="hl">Step 2</span> 指标层级：North Star→次要→Guardrail</div>
+    </div>
+    <div>
+      <div class="it"><span class="hl">Step 3</span> 分析：描述→诊断→因果</div>
+      <div class="it"><span class="hl">Step 4</span> 实验可行性→设计→指标</div>
+      <div class="it"><span class="hl">Step 5</span> 结论：行动→置信度→监控</div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="card">
+    <span class="tag tt">指标体系</span>
+    <p class="sc">North Star</p>
+    <div class="it"><span class="hl">Healthy D30 Retention</span> — 自发回访，非推送驱动，按年龄段分层</div>
+    <p class="sc">安全指标（4层）</p>
+    <div class="it"><span class="hl">曝光层</span> 有害内容曝光率、兔子洞深度、首次有害曝光时间</div>
+    <div class="it"><span class="hl">响应层</span> 举报率、会话放弃率、安全功能激活率</div>
+    <div class="it"><span class="hl">结果层</span> 骚扰举报率变化、账号删除率、监管投诉率</div>
+    <div class="it"><span class="hl">系统层</span> AUC（红队）、申诉推翻率、漏审率</div>
+    <div class="it" style="color:#791F1F">陷阱：举报率↓ ≠ 骚扰减少，需同时看"举报后行动率"</div>
+  </div>
+
+  <div class="card">
+    <span class="tag tr">合规产品指标（P0-P4）</span>
+    <div class="it"><span class="badge b0">P0</span><span class="hl">CSAM上报合规率</span> = 100%，法律红线，24h内上报NCMEC</div>
+    <div class="it"><span class="badge b0">P0</span><span class="hl">COPPA数据合规率</span> = 100%，U13 数据不用于广告定向</div>
+    <div class="it"><span class="badge b1">P1</span><span class="hl">有害内容曝光率</span> 每季度下降，按U13/13-15/16-17分层</div>
+    <div class="it"><span class="badge b1">P1</span><span class="hl">陌生人接触率</span> 仅好友政策上线后下降≥50%</div>
+    <div class="it"><span class="badge b2">P2</span><span class="hl">Opt-out率</span> &lt;20%，&gt;60%说明产品设计有问题</div>
+    <div class="it"><span class="badge b2">P2</span><span class="hl">家长满意度NPS</span> &gt;30，监管信任的领先指标</div>
+    <div class="it"><span class="badge b3">P3</span><span class="hl">人审产能利用率</span> 70-90%，&gt;95%审核员疲劳</div>
+    <div class="it"><span class="badge b4">P4</span><span class="hl">合规成本效率</span> 每季度下降，DSA罚款最高全球营收6%</div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tr">Score 阈值计算（10人团队）</span>
+  <div class="row">
+    <div>
+      <p class="sc">三个约束找交集</p>
+      <div class="it"><span class="hl">产能约束</span> 每日送审量 ≤ 10,000（10人×1000条）</div>
+      <div class="it"><span class="hl">Recall约束</span> ≥ 90% → 阈值上限，不能太高</div>
+      <div class="it"><span class="hl">Precision约束</span> ≥ 15% → 阈值下限，不能太低</div>
+      <div class="it"><span class="hl">选法</span> 交集里选 Precision 最高的点</div>
+      <div class="it"><span class="hl">校准</span> 每周千人标样，漏审率&gt;5%下调阈值</div>
+    </div>
+    <div>
+      <p class="sc">高分段样本不足时</p>
+      <div class="it">合并相邻 bin（70-80 + 80-90 → 70-90）</div>
+      <div class="it">Bootstrap 置信区间估计</div>
+      <div class="it">等待积累（临时保守阈值保底）</div>
+      <div class="it">高分段即使CI宽，有害率下限仍高，可以直接拍板</div>
+      <p class="sc" style="margin-top:8px">人力成本公式</p>
+      <div class="it">额外人数 = (目标送审量 - 当前产能) / 1000</div>
+      <div class="it">月成本 = 额外人数 × $200 × 30</div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="card">
+    <span class="tag tp">AUC / F1 / P / R 用途</span>
+    <div class="it"><span class="hl">AUC</span> 比较模型版本，不依赖阈值。随机取有害vs无害，排对的概率</div>
+    <div class="it"><span class="hl">Recall</span> 定阈值上限，安全红线 ≥ 90%。漏掉有害=最大风险</div>
+    <div class="it"><span class="hl">Precision</span> 定阈值下限，人审效率 ≥ 15%。太低→疲劳→漂移</div>
+    <div class="it"><span class="hl">F1</span> 模型迭代参考基准，不是决策指标</div>
+    <div class="it" style="color:#791F1F">F1最优点 ≠ 业务最优点，因为Recall有强约束</div>
+  </div>
+
+  <div class="card">
+    <span class="tag tt">Ground Truth 问题</span>
+    <div class="it"><span class="hl">覆盖偏差</span> 只能评估模型发现的，漏掉的永远看不到</div>
+    <div class="it"><span class="hl">红队种子集</span> 已知有害内容测召回率，每月更新</div>
+    <div class="it"><span class="hl">随机抽低分段</span> 每周1000条人审，估算漏审率</div>
+    <div class="it"><span class="hl">捕获-再捕获</span> N=(n_A × n_B)/n_AB，两源独立时有效</div>
+    <div class="it"><span class="hl">PU Learning</span> 已举报=正，未举报=未知（不是负）</div>
+    <div class="it"><span class="hl">灵敏度调整</span> 真实率=观测率/召回率，消除A/B两组检测差异</div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tb">ML 内容过滤流水线</span>
+  <div class="row3">
+    <div>
+      <p class="sc">层1：多模态分类</p>
+      <div class="it">视频ViT + Wav2Vec2（音频）</div>
+      <div class="it">Whisper→BERT（语音转文字）</div>
+      <div class="it">TrOCR（画面文字）</div>
+      <div class="it">融合：late / early / cross-attention</div>
+      <div class="it">输出：风险分数0-100（非二元）</div>
+    </div>
+    <div>
+      <p class="sc">层2：用户上下文</p>
+      <div class="it">年龄推断：XGBoost（行为+设备+社交图谱）</div>
+      <div class="it">高精确率保守阈值，人工复核边界case</div>
+      <div class="it">年龄≠报告年龄，模型推断更可靠</div>
+      <div class="it">不同年龄段应用不同风险阈值</div>
+    </div>
+    <div>
+      <p class="sc">层3：推荐重排序</p>
+      <div class="it">硬过滤：高置信有害内容直接移除</div>
+      <div class="it">惩罚重排：score - λ×risk_score</div>
+      <div class="it">λ 按年龄段递增（U13最大）</div>
+      <div class="it">长期目标：独立青少年排序模型</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tc">人审工作流（Feed Pool / CSAT / CSAM）</span>
+  <div class="row">
+    <div>
+      <p class="sc">Feed Pool 1000条设计</p>
+      <div class="it">每个国家单独抽样（文化/语言/监管不同）</div>
+      <div class="it">分层：分数区间 + 内容类型 + 高风险类别超采样</div>
+      <div class="it">低分段多抽（捕捉漏审）、中分段重点审（边界）</div>
+      <div class="it">CSAT审核员看：内容+账号信息+模型分数+评论区</div>
+      <p class="sc" style="margin-top:8px">审核质量监控</p>
+      <div class="it">IAA（Cohen's Kappa）> 0.8 为强一致</div>
+      <div class="it">审核员漂移检测：每周线性趋势分析</div>
+      <div class="it">新审核员校准期：2周复核 + Kappa>0.75才独立上岗</div>
+    </div>
+    <div>
+      <p class="sc">CSAM 强制上报</p>
+      <div class="it" style="color:#791F1F"><span class="hl">法律要求</span> 美国24h内上报NCMEC，违规最高$150,000/次</div>
+      <div class="it"><span class="hl">技术</span> PhotoDNA hash 匹配（不是ML分类）</div>
+      <div class="it"><span class="hl">流程</span> 检测→立即删除→封号→上报NCMEC</div>
+      <div class="it"><span class="hl">监控</span> 上报延迟P99、hash覆盖率、误报率</div>
+      <div class="it" style="color:#791F1F">唯一没有recall/precision权衡的场景，目标零漏报</div>
+      <p class="sc" style="margin-top:8px">CGVR（诱骗风险）</p>
+      <div class="it">单条内容可能无害，需看账号行为序列</div>
+      <div class="it">用 LSTM/Transformer 检测成年账号异常互动模式</div>
+      <div class="it">特征：与未成年人互动占比、个人信息索取频率、平台外接触尝试</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tb">A/B 测试设计要点</span>
+  <div class="row3">
+    <div>
+      <p class="sc">Pre-feasibility 4维度</p>
+      <div class="it"><span class="hl">技术</span> 指标如何定义？工程实现无障碍？</div>
+      <div class="it"><span class="hl">样本量</span> 功效分析→实验周期可行？</div>
+      <div class="it"><span class="hl">法律</span> 控制组合规？需Legal预审</div>
+      <div class="it"><span class="hl">伦理</span> 两组都有基础保护，对比程度不对比有无</div>
+    </div>
+    <div>
+      <p class="sc">随机化设计</p>
+      <div class="it"><span class="hl">单位</span> family_id（不是user_id）</div>
+      <div class="it"><span class="hl">原因</span> 家长孩子必须同组，否则投诉数据被污染</div>
+      <div class="it"><span class="hl">分层</span> 年龄段 + 使用强度 + 地区</div>
+      <div class="it"><span class="hl">时长</span> ≥4周（避免novelty effect）</div>
+      <div class="it"><span class="hl">停止条件</span> DAU下降>5%立即停止</div>
+    </div>
+    <div>
+      <p class="sc">指标陷阱</p>
+      <div class="it"><span class="hl">accept_rate</span> 只存在实验组，不能跨组比较</div>
+      <div class="it">→ 只用于实验组内优化弹窗设计</div>
+      <div class="it"><span class="hl">正确主指标</span> 两组都能测的行为指标</div>
+      <div class="it">如：自愿会话结束率、60分钟后继续使用率</div>
+      <div class="it"><span class="hl">D30指标</span> 入组期结束后再等30天观测，常被忽略</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tp">功效分析 + CUPED</span>
+  <div class="row">
+    <div>
+      <p class="sc">四参数口诀</p>
+      <div class="it"><span class="hl">α=0.05</span> 假阳性率，安全场景可放宽到0.10</div>
+      <div class="it"><span class="hl">功效=0.80</span> 真实效果被检测到的概率</div>
+      <div class="it"><span class="hl">MDE</span> 先和PM对齐，再算样本量（最重要）</div>
+      <div class="it"><span class="hl">N公式</span> (Z_α/2+Z_β)² × [p1(1-p1)+p2(1-p2)] / MDE²</div>
+      <div class="it"><span class="hl">总周期</span> 入组期 + 观测期 + 14天novelty缓冲</div>
+      <p class="sc" style="margin-top:8px">样本不足时</p>
+      <div class="it">放宽MDE / 降低触发门槛 / 换代理指标</div>
+      <div class="it">分阶段实验 / 历史数据回溯</div>
+    </div>
+    <div>
+      <p class="sc">CUPED 方差缩减</p>
+      <div class="it"><span class="hl">公式</span> Y_cuped = Y - θ(Y_pre - E[Y_pre])</div>
+      <div class="it"><span class="hl">θ</span> 必须用实验前数据估计，不能用实验期</div>
+      <div class="it"><span class="hl">效果</span> 方差缩减 = ρ²（相关系数的平方）</div>
+      <div class="it">ρ=0.7 → 缩减49%，实验周期减半</div>
+      <div class="it"><span class="hl">TikTok典型值</span> D30 retention ↔ 实验前D30: ρ≈0.7-0.8</div>
+      <div class="it" style="color:#791F1F">θ用实验期数据 → 被处理效应污染 → 错误结论</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag ta">合规因果推断方法</span>
+  <div class="row3">
+    <div>
+      <p class="sc">DiD</p>
+      <div class="it">有控制组 + 平行趋势成立</div>
+      <div class="it">验证：画8-12周预处理趋势</div>
+      <div class="it">分阶段rollout → Callaway-Sant'Anna</div>
+      <div class="it">安慰剂测试：假处理日期系数≈0</div>
+    </div>
+    <div>
+      <p class="sc">回归断点（RD）</p>
+      <div class="it">年龄断点：13岁/18岁（天然实验）</div>
+      <div class="it">用户无法操控生日 → 内生性很小</div>
+      <div class="it">CCT最优带宽选择</div>
+      <div class="it">McCrary检验：密度在断点连续</div>
+    </div>
+    <div>
+      <p class="sc">其他方法</p>
+      <div class="it"><span class="hl">合成控制</span> 只有一个处理市场</div>
+      <div class="it"><span class="hl">ITS</span> 完全无控制组</div>
+      <div class="it"><span class="hl">IV</span> 处理变量有内生性</div>
+      <div class="it"><span class="hl">Sequential test</span> 发现有害可提前停止</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tg">监管框架速查</span>
+  <div class="row3">
+    <div>
+      <div class="it"><span class="hl">COPPA（美国）</span> U13需家长同意，数据收集严格限制，不能用于广告定向</div>
+    </div>
+    <div>
+      <div class="it"><span class="hl">AADC（英国）</span> U18默认最高保护，算法放大是明确风险，控制组需Legal预审</div>
+    </div>
+    <div>
+      <div class="it"><span class="hl">DSA（欧盟）</span> 推荐系统需可解释，每年外部审计，罚款最高全球营收6%</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag ta">CEO 汇报模板</span>
+  <div class="row">
+    <div>
+      <div class="it"><span class="hl">1. 问题有多严重</span> 数字量化，一句话</div>
+      <div class="it"><span class="hl">2. 原因是什么</span> 模型/阈值/人审/新型内容</div>
+      <div class="it"><span class="hl">3. 怎么修/多久</span> 短期48h + 长期2周</div>
+      <div class="it"><span class="hl">4. 需要什么资源</span> 人力成本精确到数字</div>
+      <div class="it"><span class="hl">5. 需要您决策</span> 明确请求，不含糊</div>
+    </div>
+    <div>
+      <p class="sc">DAU下降好事还是坏事？</p>
+      <div class="it">看骚扰举报率是否下降 ≥50%</div>
+      <div class="it">看D30 retention是否稳住</div>
+      <div class="it">看好友互动率是否上升</div>
+      <div class="it" style="color:#791F1F">政策必然的下降=接受，产品设计导致的=修复</div>
+      <div class="it">向CFO：安全投入=风险对冲，DSA罚款最高营收6%</div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="background:var(--color-background-secondary)">
+  <p class="sc">面试金句速查</p>
+  <div class="row">
+    <div>
+      <div class="it"><span class="hl">阈值</span> "三个约束的动态平衡：产能给下限，Recall给上限，Precision保效率"</div>
+      <div class="it"><span class="hl">AUC</span> "随机取一个有害和一个无害，模型排对的概率"</div>
+      <div class="it"><span class="hl">Ground Truth</span> "覆盖偏差问题——模型漏掉的永远看不到"</div>
+      <div class="it"><span class="hl">CUPED</span> "θ必须在实验前固定，用实验期数据会污染处理效应"</div>
+      <div class="it"><span class="hl">Family Pairing</span> "以family_id为随机化单元，同一家庭所有账号分到同一组"</div>
+    </div>
+    <div>
+      <div class="it"><span class="hl">RD设计</span> "用户无法操控生日，年龄断点是最干净的自然实验"</div>
+      <div class="it"><span class="hl">Accept rate</span> "只存在实验组，不能跨组比较，只用于弹窗设计优化"</div>
+      <div class="it"><span class="hl">CSAM</span> "唯一没有recall/precision权衡的场景，目标零漏报"</div>
+      <div class="it"><span class="hl">CGVR</span> "单条内容无害，行为序列有害——用账号级序列模型"</div>
+      <div class="it"><span class="hl">合规指标</span> "约束优化问题，不是单一最大化——P0红线不可妥协"</div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+  <button onclick="sendPrompt('给我来一道新的模拟面试题')">新模拟题 ↗</button>
+  <button onclick="sendPrompt('深挖CSAM检测的技术细节')">深挖CSAM ↗</button>
+  <button onclick="sendPrompt('给我出一道关于合规指标的案例题')">合规指标案例 ↗</button>
+  <button onclick="sendPrompt('深挖CGVR检测模型')">深挖CGVR ↗</button>
+</div>
+
+</div>

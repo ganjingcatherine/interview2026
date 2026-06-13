@@ -1,0 +1,265 @@
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;">TikTok Risk Team 指标基准参考表，含正常范围、警戒线、异常诊断和数据来源</h2>
+<style>
+*{box-sizing:border-box}
+.tbl{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+.tbl th{background:var(--color-background-secondary);color:var(--color-text-secondary);font-weight:500;padding:7px 8px;text-align:left;border-bottom:1px solid var(--color-border-secondary)}
+.tbl td{padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);vertical-align:top;line-height:1.55}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--color-background-secondary)}
+.hl{color:var(--color-text-primary);font-weight:500}
+.mono{font-family:var(--font-mono);font-size:10px;background:var(--color-background-secondary);padding:1px 4px;border-radius:3px;color:var(--color-text-primary)}
+.good{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:#E1F5EE;color:#085041;font-weight:500;white-space:nowrap}
+.warn{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:#FAEEDA;color:#633806;font-weight:500;white-space:nowrap}
+.bad{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:#FCEBEB;color:#791F1F;font-weight:500;white-space:nowrap}
+.p0{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:#FCEBEB;color:#791F1F;font-weight:500}
+.p1{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:#FAEEDA;color:#633806;font-weight:500}
+.p2{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:#E6F1FB;color:#0C447C;font-weight:500}
+.p3{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:#E1F5EE;color:#085041;font-weight:500}
+.src{font-size:10px;color:var(--color-text-tertiary);font-style:italic}
+.sec{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--color-border-secondary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:14px;overflow-x:auto}
+.note{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;font-size:11px;color:var(--color-text-secondary);margin-top:10px;line-height:1.6}
+</style>
+
+<div style="padding:1rem 0;">
+
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;font-size:11px;">
+  <span class="p0">P0 法律红线</span>
+  <span class="p1">P1 安全核心</span>
+  <span class="p2">P2 用户体验</span>
+  <span class="p3">P3 系统健康</span>
+  <span style="font-size:11px;color:var(--color-text-secondary);margin-left:4px;">数值来源：TikTok透明度报告 + Meta/YouTube公开数据 + 行业推断（标注★）</span>
+</div>
+
+<div class="card">
+<p class="sec" style="margin-top:0">Safety Metrics</p>
+<table class="tbl">
+<colgroup><col style="width:16%"><col style="width:14%"><col style="width:14%"><col style="width:14%"><col style="width:26%"><col style="width:16%"></colgroup>
+<thead>
+<tr><th>指标</th><th>健康范围</th><th>警戒线</th><th>紧急阈值</th><th>异常时诊断方向</th><th>数据来源</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="hl">Harmful content removal rate</span><br><span class="p1">P1</span><br>（按类别）</td>
+  <td><span class="good">CSAM: &gt;99.9%</span><br><span class="good">暴力: &gt;95%</span><br><span class="good">骚扰: &gt;90%</span></td>
+  <td><span class="warn">任意类别&lt;90%</span></td>
+  <td><span class="bad">CSAM &lt;99%</span><br><span class="bad">任意类别&lt;80%</span></td>
+  <td>
+    按内容类别拆分 → 找哪类下降<br>
+    看被举报但未删除的内容分数分布<br>
+    检查模型是否有新型规避手法<br>
+    <span class="mono">removal_rate = removed / (removed+remained_reported)</span>
+  </td>
+  <td><span class="src">TikTok 透明度报告 Q4 2023，CSAM &gt;99.9%有公开披露</span></td>
+</tr>
+<tr>
+  <td><span class="hl">CSAM detection count</span><br><span class="p0">P0 法律</span><br>+ NCMEC report latency</td>
+  <td><span class="good">上报率: 100%</span><br><span class="good">延迟P50: &lt;2h</span><br><span class="good">延迟P99: &lt;12h</span></td>
+  <td><span class="warn">延迟P99 &gt;18h</span></td>
+  <td><span class="bad">任何未在24h内上报</span><br><span class="bad">上报率 &lt;100%</span></td>
+  <td>
+    上报率 &lt;100% → 立即查流水线断点<br>
+    延迟过高拆解：<br>
+    &nbsp;hash检测慢 → 数据库负载<br>
+    &nbsp;人工确认慢 → 移除人工步骤<br>
+    &nbsp;NCMEC API超时 → 启用备用链路<br>
+    <span class="mono">latency = ncmec_ack_time - upload_time</span>
+  </td>
+  <td><span class="src">美国法律要求24h，TikTok内部目标推断&lt;6h★；NCMEC年度报告有行业对标</span></td>
+</tr>
+<tr>
+  <td><span class="hl">Appeal overturn rate</span><br><span class="p3">P3</span><br>（按内容类别）</td>
+  <td><span class="good">&lt;10% 整体</span><br><span class="good">&lt;5% CSAM类</span><br><span class="good">&lt;15% 边界内容</span></td>
+  <td><span class="warn">任意类别 &gt;15%</span></td>
+  <td><span class="bad">整体 &gt;20%</span><br><span class="bad">同类别连续2周&gt;15%</span></td>
+  <td>
+    按内容类别拆 → 找系统性误判类别<br>
+    按分数段拆 → 高分段推翻多=阈值太低<br>
+    按时间拆 → 某周突增=找模型更新节点<br>
+    推翻率&gt;15% → 触发该类别重标注+重训练<br>
+    <span class="mono">overturn_rate = overturned_appeals / total_appeals</span>
+  </td>
+  <td><span class="src">Meta透明度报告公开overturn rate约8-12%；TikTok未公开但推断类似★</span></td>
+</tr>
+<tr>
+  <td><span class="hl">False positive rate</span><br><span class="p3">P3</span><br>（随机审核样本）</td>
+  <td><span class="good">&lt;5% 整体</span><br><span class="good">&lt;1% CSAM类</span><br><span class="good">&lt;10% 边界内容</span></td>
+  <td><span class="warn">整体 &gt;8%</span></td>
+  <td><span class="bad">整体 &gt;15%</span><br><span class="bad">创作者投诉量&gt;3x基线</span></td>
+  <td>
+    按内容类别拆 → 哪类误报率最高？<br>
+    按创作者类型拆 → 新创作者vs老创作者<br>
+    FP高 → 阈值调高 OR 该类别重训练<br>
+    注意：FP和FN是反向权衡<br>
+    青少年安全：宁可高FP也要低FN<br>
+    <span class="mono">FP_rate = false_positives / (false_positives + true_negatives)</span>
+  </td>
+  <td><span class="src">来自每周随机抽样1000条人审的估算；YouTube公开FP率约3-7%★</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<p class="sec" style="margin-top:0">Teen-Specific Metrics</p>
+<table class="tbl">
+<colgroup><col style="width:16%"><col style="width:14%"><col style="width:14%"><col style="width:14%"><col style="width:26%"><col style="width:16%"></colgroup>
+<thead>
+<tr><th>指标</th><th>健康范围</th><th>警戒线</th><th>紧急阈值</th><th>异常时诊断方向</th><th>数据来源</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="hl">Teen harmful exposure rate</span><br><span class="p1">P1</span><br>（U13 / 13-15 / 16-17分层）</td>
+  <td><span class="good">U13: &lt;0.1%</span><br><span class="good">13-15: &lt;0.3%</span><br><span class="good">16-17: &lt;0.5%</span><br><span class="good">每季度下降</span></td>
+  <td><span class="warn">任意年龄段单周&gt;2x基线</span></td>
+  <td><span class="bad">U13 &gt;0.5%</span><br><span class="bad">任意段 &gt;1%</span><br><span class="bad">连续上升3周</span></td>
+  <td>
+    先分U13/13-15/16-17单独看<br>
+    按内容类别拆 → 哪类有害内容爆发？<br>
+    被举报内容的模型分数分布：<br>
+    &nbsp;低分(0-30) → 模型漏检，需重训练<br>
+    &nbsp;高分(70+)未被拦 → 阈值问题<br>
+    &nbsp;中分进了人审但放过 → 审核员培训<br>
+    <span class="mono">rate = harmful_impressions_teen / total_impressions_teen</span>
+  </td>
+  <td><span class="src">TikTok透明度报告有大类别数据；具体年龄段分层未公开，基准为行业推断★；Meta Kids Messenger承诺&lt;0.1%</span></td>
+</tr>
+<tr>
+  <td><span class="hl">Family Pairing adoption rate</span><br><span class="p2">P2</span></td>
+  <td><span class="good">整体: &gt;25%</span><br><span class="good">U13: &gt;50%</span><br><span class="good">每月增长&gt;2%</span></td>
+  <td><span class="warn">整体 &lt;20%</span><br><span class="warn">U13 &lt;35%</span></td>
+  <td><span class="bad">整体月度增长停滞或下降</span></td>
+  <td>
+    按年龄段拆 → U13家长激活率应最高<br>
+    按地区拆 → 文化差异大，分开看<br>
+    低激活率原因：不知道有此功能 OR 太复杂<br>
+    看激活漏斗：知晓→点击→完成激活<br>
+    看激活后功能使用率（激活≠使用）<br>
+    <span class="mono">rate = family_paired_teen_accounts / total_teen_accounts</span>
+  </td>
+  <td><span class="src">TikTok 2023年报披露Family Pairing用户数增长，具体比率未公开；25%为行业推断★</span></td>
+</tr>
+<tr>
+  <td><span class="hl">Restricted mode opt-out rate</span><br><span class="p2">P2</span></td>
+  <td><span class="good">&lt;15% 整体</span><br><span class="good">&lt;5% U13</span><br><span class="good">（U13由家长控制，应接近0）</span></td>
+  <td><span class="warn">整体 &gt;25%</span></td>
+  <td><span class="bad">整体 &gt;40%</span><br><span class="bad">U13 &gt;10%（说明家长在关闭）</span></td>
+  <td>
+    谁在opt-out？（家长 vs 青少年自己）<br>
+    opt-out后用户行为变化（session时长↑=被限制了）<br>
+    opt-out前最后做了什么（内容类型？）<br>
+    高opt-out → 产品设计问题，不是安全问题<br>
+    按用户年龄细分：16-17比13-15更可能opt-out<br>
+    <span class="mono">rate = opted_out / accounts_with_restricted_mode_enabled</span>
+  </td>
+  <td><span class="src">AADC合规评估报告有参考；&lt;15%为行业最佳实践推断★</span></td>
+</tr>
+<tr>
+  <td><span class="hl">Age misrepresentation detection rate</span><br><span class="p1">P1</span></td>
+  <td><span class="good">Recall: &gt;85%</span><br><span class="good">Precision: &gt;70%</span><br><span class="good">（宁可高FP，不漏未成年人）</span></td>
+  <td><span class="warn">Recall &lt;80%</span><br><span class="warn">Precision &lt;60%（太多误伤成年人）</span></td>
+  <td><span class="bad">Recall &lt;70%</span><br><span class="bad">监管投诉中年龄核实问题&gt;10%</span></td>
+  <td>
+    用红队测试：用已知未成年账号测召回率<br>
+    按年龄段拆 → 哪个年龄最难判断（通常14-16岁）<br>
+    按注册渠道拆 → iOS/Android年龄核实机制不同<br>
+    高误报率 → 模型对特定用户群体有偏见<br>
+    用McCrary测试检验报告年龄分布是否有堆积<br>
+    <span class="mono">recall = correctly_flagged_minors / total_actual_minors</span>
+  </td>
+  <td><span class="src">FTC vs TikTok和解文件提及年龄核实要求；具体数值为行业推断★；Meta Kids约90% recall</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<p class="sec" style="margin-top:0">System Health Metrics</p>
+<table class="tbl">
+<colgroup><col style="width:16%"><col style="width:14%"><col style="width:14%"><col style="width:14%"><col style="width:26%"><col style="width:16%"></colgroup>
+<thead>
+<tr><th>指标</th><th>健康范围</th><th>警戒线</th><th>紧急阈值</th><th>异常时诊断方向</th><th>数据来源</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="hl">Model AUC</span><br><span class="p3">P3</span><br>（红队种子集，每周）</td>
+  <td><span class="good">整体: &gt;0.92</span><br><span class="good">CSAM类: &gt;0.99</span><br><span class="good">边界内容: &gt;0.85</span><br><span class="good">周周稳定</span></td>
+  <td><span class="warn">周环比下降&gt;0.02</span></td>
+  <td><span class="bad">整体下降&gt;0.05</span><br><span class="bad">CSAM AUC &lt;0.98</span></td>
+  <td>
+    按内容类别拆AUC → 哪类下降最多？<br>
+    检查红队种子集是否过期（需每月更新）<br>
+    数据分布漂移检测 → 新型内容是否出现？<br>
+    对比V1/V2模型 → 是最新更新引起的回退？<br>
+    AUC下降&gt;0.03且连续2周 → 触发重训练<br>
+    <span class="mono">auc = roc_auc_score(y_true_redteam, y_scores)</span>
+  </td>
+  <td><span class="src">行业对标：成熟内容安全模型AUC通常&gt;0.90；Google SafeSearch论文有参考；具体值为推断★</span></td>
+</tr>
+<tr>
+  <td><span class="hl">Review queue utilization</span><br><span class="p3">P3</span><br>（人审产能利用率）</td>
+  <td><span class="good">70-90% 健康区间</span><br><span class="good">日波动&lt;±10%</span></td>
+  <td><span class="warn">&gt;90% 或 &lt;65%</span></td>
+  <td><span class="bad">&gt;95% 持续&gt;2天</span><br><span class="bad">&lt;50%（严重浪费）</span></td>
+  <td>
+    &gt;95%：拆解原因<br>
+    &nbsp;日送审量↑ → 阈值被调低？内容激增？<br>
+    &nbsp;审核员人数↓ → 离职/请假？<br>
+    &nbsp;同时看IAA → 质量是否已下降？<br>
+    &lt;65%：<br>
+    &nbsp;阈值太高 → 看漏审率是否上升<br>
+    &nbsp;DAU下降 → 内容总量减少<br>
+    <span class="mono">utilization = daily_queue / (n_reviewers × cases_per_day)</span>
+  </td>
+  <td><span class="src">70-90%为运营管理通用最佳实践（客服中心/内容审核均适用）；Meta公开其审核团队规模约15,000人</span></td>
+</tr>
+<tr>
+  <td><span class="hl">Hash match latency P99</span><br><span class="p0">P0 法律</span><br>（CSAM检测延迟）</td>
+  <td><span class="good">P50: &lt;50ms</span><br><span class="good">P95: &lt;200ms</span><br><span class="good">P99: &lt;500ms</span><br><span class="good">（内容发布前完成）</span></td>
+  <td><span class="warn">P99 &gt;1秒</span></td>
+  <td><span class="bad">P99 &gt;5秒</span><br><span class="bad">任何内容未检测直接发布</span></td>
+  <td>
+    P99突增：拆解流水线各阶段<br>
+    &nbsp;hash计算慢 → CPU/GPU负载？<br>
+    &nbsp;数据库查询慢 → 索引问题？DB连接池耗尽？<br>
+    &nbsp;网络延迟 → 跨区域请求？<br>
+    P99过高的危险：内容在检测完成前已发布<br>
+    → 补救：发布后检测到再删除（but用户已看到）<br>
+    目标：检测在内容首次曝光前完成<br>
+    <span class="mono">latency = hash_match_complete_time - upload_start_time</span>
+  </td>
+  <td><span class="src">PhotoDNA官方文档：毫秒级延迟；&lt;100ms为行业实践目标★；内容上传到发布通常有数秒窗口</span></td>
+</tr>
+<tr>
+  <td><span class="hl">千人标样漏审率</span><br><span class="p3">P3</span><br>（每周随机抽样）</td>
+  <td><span class="good">&lt;3% 整体</span><br><span class="good">&lt;0.5% CSAM类</span><br><span class="good">&lt;5% 边界内容</span></td>
+  <td><span class="warn">整体 &gt;5%</span></td>
+  <td><span class="bad">连续2周 &gt;5%</span><br><span class="bad">CSAM类 &gt;0%</span></td>
+  <td>
+    按分数段拆 → 哪个分数区间漏审最多？<br>
+    按内容类别拆 → 新型有害内容涌入？<br>
+    时间趋势 → 渐增=模型漂移；突增=新手法出现<br>
+    漏审率&gt;5%连续2周：<br>
+    &nbsp;短期：下调阈值+扩人力（计算成本）<br>
+    &nbsp;长期：触发模型重训练<br>
+    <span class="mono">miss_rate = harmful_found_in_sample / sample_size</span><br>
+    <span class="mono">从score&lt;阈值的内容中随机抽取</span>
+  </td>
+  <td><span class="src">3%为行业推断的合理目标★；具体抽样方法参考Sculley et al. "Hidden Technical Debt in ML Systems"</span></td>
+</tr>
+</tbody>
+</table>
+
+<div class="note">
+  <span style="font-weight:500;color:var(--color-text-primary);">数据来源说明：</span> 标注★的数值为基于公开信息的行业推断，非TikTok官方数据。可信度较高的公开来源：TikTok Community Guidelines Enforcement Report（每季度）、Meta Transparency Report、YouTube Responsibility Report、NCMEC年度报告、FTC/ICO监管文件。面试时如被问到，可以说"基于行业公开报告和最佳实践的推断"，而不要说是TikTok内部数据。
+</div>
+</div>
+
+<div style="text-align:center;margin-top:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+  <button onclick="sendPrompt('把这个基准表加进复习提纲文件')">加进提纲文件 ↗</button>
+  <button onclick="sendPrompt('给我一道关于指标异常诊断的模拟面试题')">模拟面试题 ↗</button>
+  <button onclick="sendPrompt('深挖CSAM hash match latency的技术实现')">深挖技术实现 ↗</button>
+</div>
+
+</div>

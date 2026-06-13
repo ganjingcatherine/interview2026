@@ -1,0 +1,203 @@
+
+<h2 class="sr-only">面试数据分析框架速查卡，含6个核心框架和TikTok场景例子</h2>
+<style>
+.wrap{padding:1rem 0}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:12px}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500;margin-bottom:8px;margin-right:4px}
+.tb{background:#E6F1FB;color:#0C447C}
+.tt{background:#E1F5EE;color:#085041}
+.ta{background:#FAEEDA;color:#633806}
+.tr{background:#FCEBEB;color:#791F1F}
+.tp{background:#EEEDFE;color:#3C3489}
+.tg{background:#EAF3DE;color:#27500A}
+.tc{background:#FAECE7;color:#712B13}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.row3{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:10px}
+.it{font-size:12px;color:var(--color-text-secondary);padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.6}
+.it:last-child{border-bottom:none}
+.hl{color:var(--color-text-primary);font-weight:500}
+.sc{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:8px 0 5px;padding-bottom:4px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;font-size:11px;font-family:var(--font-mono);color:var(--color-text-primary);margin:6px 0;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.step{display:flex;gap:10px;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.step:last-child{border-bottom:none}
+.num{min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;margin-top:1px}
+.nb{background:#E6F1FB;color:#0C447C}
+.nt{background:#E1F5EE;color:#085041}
+.na{background:#FAEEDA;color:#633806}
+.nr{background:#FCEBEB;color:#791F1F}
+.np{background:#EEEDFE;color:#3C3489}
+.ng{background:#EAF3DE;color:#27500A}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;text-align:center}
+.sn{font-size:18px;font-weight:500;margin:0;color:var(--color-text-primary)}
+.sl{font-size:10px;color:var(--color-text-secondary);margin:2px 0 0}
+.warn{background:#FAEEDA;border-radius:var(--border-radius-md);padding:7px 10px;font-size:11px;color:#633806;margin:6px 0;line-height:1.5}
+.good{background:#E1F5EE;border-radius:var(--border-radius-md);padding:7px 10px;font-size:11px;color:#085041;margin:6px 0;line-height:1.5}
+.tbl{width:100%;border-collapse:collapse;font-size:11px}
+.tbl th{background:var(--color-background-secondary);color:var(--color-text-secondary);font-weight:500;padding:6px 8px;text-align:left;border-bottom:1px solid var(--color-border-secondary)}
+.tbl td{padding:6px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);vertical-align:top;line-height:1.5}
+.tbl tr:last-child td{border-bottom:none}
+</style>
+
+<div class="wrap">
+
+<div class="card">
+  <span class="tag tb">框架1</span><span class="tag" style="background:#F1EFE8;color:#444441">最常用 — 指标异常分析</span>
+  <p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 10px">5步诊断法：指标快速变化</p>
+  <div class="step"><div class="num nb">1</div><div><span class="hl">澄清业务背景</span><br><span style="font-size:11px;color:var(--color-text-secondary)">全球还是特定市场？什么时间段？哪类内容/用户？分母有没有同时变化？</span></div></div>
+  <div class="step"><div class="num nb">2</div><div><span class="hl">区分测量问题 vs 真实问题</span><br><span style="font-size:11px;color:var(--color-text-secondary)">功能入口改版？统计口径变化？季节性？汇率影响？分母激增？→ 先排除假信号</span></div></div>
+  <div class="step"><div class="num nb">3</div><div><span class="hl">拆解分子和分母</span><br><span style="font-size:11px;color:var(--color-text-secondary)">rate = 分子/分母，两个独立画趋势图。率下降可能是分母涨了，不是分子降了</span></div></div>
+  <div class="step"><div class="num nb">4</div><div><span class="hl">分层找根因</span><br><span style="font-size:11px;color:var(--color-text-secondary)">市场 / 年龄段 / 内容类型 / 用户类型（新vs老）/ 渠道 / 设备。全局平均掩盖局部问题</span></div></div>
+  <div class="step"><div class="num nb">5</div><div><span class="hl">给有优先级的行动建议 + 量化影响</span><br><span style="font-size:11px;color:var(--color-text-secondary)">立即 / 短期 / 长期。结论格式：最可能原因=X，建议=Y，预计影响=Z</span></div></div>
+  <div class="good" style="margin-top:8px"><span style="font-weight:500">TikTok例子：</span> LIVE举报率上升40% → 先看是不是举报入口改版 → 分层看是特定市场还是全球 → 拆供给侧（新型规避手法）/ 需求侧（算法放大）/ 系统侧（模型recall下降）</div>
+</div>
+
+<div class="card">
+  <span class="tag tt">框架2</span><span class="tag" style="background:#F1EFE8;color:#444441">通用问题结构</span>
+  <p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 10px">SCQA：任何业务问题的开场结构</p>
+  <div class="row">
+    <div>
+      <div class="step"><div class="num nt">S</div><div><span class="hl">Situation</span><br><span style="font-size:11px;color:var(--color-text-secondary)">业务背景是什么？现状是什么？</span></div></div>
+      <div class="step"><div class="num nt">C</div><div><span class="hl">Complication</span><br><span style="font-size:11px;color:var(--color-text-secondary)">出现了什么异常/问题？为什么现在需要解决？</span></div></div>
+      <div class="step"><div class="num nt">Q</div><div><span class="hl">Question</span><br><span style="font-size:11px;color:var(--color-text-secondary)">核心问题是什么？（一句话）</span></div></div>
+      <div class="step"><div class="num nt">A</div><div><span class="hl">Answer</span><br><span style="font-size:11px;color:var(--color-text-secondary)">我的假设和分析路径是什么？</span></div></div>
+    </div>
+    <div>
+      <p class="sc">为什么先说SCQA再说方法</p>
+      <div class="it">Director 不想先听技术方案</div>
+      <div class="it">要先让他理解：这件事为什么重要</div>
+      <div class="it">SCQA = 让对方和你站在同一个起点</div>
+      <div class="warn"><span style="font-weight:500">反例：</span>"我用了XGBoost，AUC=0.92"<br><span style="font-weight:500">正确：</span>"这个项目背景是... 出现的问题是... 核心问题是... 我的分析路径是..."</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag ta">框架3</span><span class="tag" style="background:#F1EFE8;color:#444441">供需拆解</span>
+  <p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 10px">Supply / Demand / System：任何平台业务指标的三叉树</p>
+  <div class="row3">
+    <div>
+      <p class="sc">供给侧</p>
+      <div class="it">内容/商品/主播数量</div>
+      <div class="it">质量分布变化</div>
+      <div class="it">新供给者激活率</div>
+      <div class="it">供给者流失率</div>
+      <div class="it" style="color:#633806">例：优质LIVE主播流失 → 礼物收入↓</div>
+    </div>
+    <div>
+      <p class="sc">需求侧</p>
+      <div class="it">用户数量（DAU/MAU）</div>
+      <div class="it">用户行为深度（时长/频次）</div>
+      <div class="it">新用户 vs 老用户</div>
+      <div class="it">用户意愿/信任度</div>
+      <div class="it" style="color:#633806">例：新用户送礼转化率低 → 引导漏斗断了</div>
+    </div>
+    <div>
+      <p class="sc">系统侧</p>
+      <div class="it">算法/推荐变化</div>
+      <div class="it">产品功能改版</div>
+      <div class="it">模型性能变化</div>
+      <div class="it">基础设施问题</div>
+      <div class="it" style="color:#633806">例：LIVE检测模型recall↓ → 有害内容漏审↑</div>
+    </div>
+  </div>
+  <div class="good" style="margin-top:8px"><span style="font-weight:500">使用时机：</span> 任何平台指标（DAU/收入/安全指标）异常，都先从这三个角度拆假设，再用数据验证</div>
+</div>
+
+<div class="card">
+  <span class="tag tr">框架4</span><span class="tag" style="background:#F1EFE8;color:#444441">Root Cause</span>
+  <p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 10px">5-Why + 漏斗分解：从现象到根因</p>
+  <div class="row">
+    <div>
+      <p class="sc">漏斗分解法</p>
+      <div class="box">指标 = 流量 × 转化率1 × 转化率2 × ...
+
+LIVE礼物收入 =
+  LIVE观看用户数
+  × 进入直播间率
+  × 看到礼物引导率
+  × 礼物点击率
+  × 首次购买完成率
+  × 人均礼物价值
+
+每一步都可以独立测量
+哪一步跌幅最大 = 根因所在</div>
+    </div>
+    <div>
+      <p class="sc">5-Why 往下追</p>
+      <div class="step"><div class="num nr">W1</div><div><span style="font-size:11px">LIVE礼物收入下降了</span></div></div>
+      <div class="step"><div class="num nr">W2</div><div><span style="font-size:11px">为什么？→ 送礼用户数下降</span></div></div>
+      <div class="step"><div class="num nr">W3</div><div><span style="font-size:11px">为什么？→ 新用户首次礼物转化率低</span></div></div>
+      <div class="step"><div class="num nr">W4</div><div><span style="font-size:11px">为什么？→ 礼物引导UI改版，入口不显眼</span></div></div>
+      <div class="step"><div class="num nr">W5</div><div><span style="font-size:11px">为什么？→ A/B test没有充分测试新用户流</span></div></div>
+      <div style="font-size:11px;color:var(--color-text-secondary);padding:6px 0">根因 = UI问题，解法 = 回滚或优化引导</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tp">框架5</span><span class="tag" style="background:#F1EFE8;color:#444441">Exploration</span>
+  <p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 10px">机会点发现：主动寻找 vs 被动响应</p>
+  <div class="row">
+    <div>
+      <p class="sc">4种机会点来源</p>
+      <div class="step"><div class="num np">1</div><div><span class="hl">指标异常驱动</span><br><span style="font-size:11px;color:var(--color-text-secondary)">监控发现某个指标偏离基线 → 深挖根因 → 发现未被满足的需求</span></div></div>
+      <div class="step"><div class="num np">2</div><div><span class="hl">用户行为分析</span><br><span style="font-size:11px;color:var(--color-text-secondary)">分群分析找到高价值用户的行为模式 → 复制到更广人群</span></div></div>
+      <div class="step"><div class="num np">3</div><div><span class="hl">竞品/行业对标</span><br><span style="font-size:11px;color:var(--color-text-secondary)">Douyin已经验证的模式 → TikTok还没做 → 机会点</span></div></div>
+      <div class="step"><div class="num np">4</div><div><span class="hl">业务假设验证</span><br><span style="font-size:11px;color:var(--color-text-secondary)">从业务直觉出发 → 用数据验证/推翻假设</span></div></div>
+    </div>
+    <div>
+      <p class="sc">如何向Director展示Exploration能力</p>
+      <div class="warn"><span style="font-weight:500">不要说：</span> "我等PM给我题目然后我分析"</div>
+      <div class="good"><span style="font-weight:500">要说：</span> "我主动监控X指标，发现Y异常，深挖后发现Z机会，推动了W决策，带来$N影响"</div>
+      <div class="it" style="margin-top:8px">Exploration = 主动发现 + 主动推动<br>不是技术能力，是business ownership</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tg">框架6</span><span class="tag" style="background:#F1EFE8;color:#444441">业务影响量化</span>
+  <p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 10px">把分析结论翻译成Director语言</p>
+  <div class="row">
+    <div>
+      <p class="sc">量化的4个层次</p>
+      <div class="step"><div class="num ng">L1</div><div><span class="hl">技术指标</span><br><span style="font-size:11px;color:var(--color-text-secondary)">Recall提升5%，FNR从6%降到2.8%</span></div></div>
+      <div class="step"><div class="num ng">L2</div><div><span class="hl">用户行为指标</span><br><span style="font-size:11px;color:var(--color-text-secondary)">有害内容曝光减少X万次，用户投诉率降低Y%</span></div></div>
+      <div class="step"><div class="num ng">L3</div><div><span class="hl">业务指标</span><br><span style="font-size:11px;color:var(--color-text-secondary)">广告主品牌安全评分提升，LIVE礼物收入稳定</span></div></div>
+      <div class="step"><div class="num ng">L4</div><div><span class="hl">财务/战略影响</span><br><span style="font-size:11px;color:var(--color-text-secondary)">避免监管罚款$Xm，支撑$YB的GMV目标</span></div></div>
+    </div>
+    <div>
+      <p class="sc">Director最想听L3和L4</p>
+      <div class="warn">Senior DS 常犯错：只说L1（技术指标）<br>Director 不关心 AUC，关心业务影响</div>
+      <div class="box">结论模板（必背）：
+
+"根据分析，最可能的原因是 [X]。
+短期建议是 [Y]，预计在 [时间] 内
+将 [指标] 从 [现值] 改善到 [目标值]，
+对应业务影响是 [Z]。
+需要您决策的是 [资源/优先级]。"</div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="background:var(--color-background-secondary)">
+  <p style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 10px">速查：什么场景用什么框架</p>
+  <table class="tbl">
+  <thead><tr><th>面试场景</th><th>主框架</th><th>辅助框架</th></tr></thead>
+  <tbody>
+  <tr><td>指标上升/下降了，为什么</td><td style="color:#0C447C;font-weight:500">5步诊断法</td><td>供需拆解 + 漏斗分解</td></tr>
+  <tr><td>开放题：这个业务怎么分析</td><td style="color:#085041;font-weight:500">SCQA先定框架</td><td>再用5步或供需</td></tr>
+  <tr><td>新功能/策略有没有效果</td><td style="color:#633806;font-weight:500">A/B test + 因果推断</td><td>CUPED / DiD / RD</td></tr>
+  <tr><td>如何找到业务机会点</td><td style="color:#3C3489;font-weight:500">Exploration框架</td><td>用户分群 + 竞品对标</td></tr>
+  <tr><td>向Director汇报结论</td><td style="color:#27500A;font-weight:500">L3/L4量化影响</td><td>BLUF（先说结论）</td></tr>
+  <tr><td>Risk指标异常</td><td style="color:#791F1F;font-weight:500">5步诊断 + 供需</td><td>成本函数量化 FN vs FP</td></tr>
+  </tbody>
+  </table>
+</div>
+
+<div style="text-align:center;margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+  <button onclick="sendPrompt('给我一道 skip-level Director 面试的业务分析模拟题')">模拟面试题 ↗</button>
+  <button onclick="sendPrompt('帮我准备 exploration 如何寻找机会点的回答')">Exploration 准备 ↗</button>
+  <button onclick="sendPrompt('帮我准备 statistical methods 在业务中应用的回答')">Statistical Methods ↗</button>
+</div>
+
+</div>

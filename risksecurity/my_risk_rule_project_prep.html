@@ -1,0 +1,173 @@
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;">Risk Rule Optimization Project Interview Prep Card — Same-card ban soft delete experiment</h2>
+<style>
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:10px}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500;margin-bottom:6px;margin-right:3px}
+.tb{background:#E6F1FB;color:#0C447C} .tt{background:#E1F5EE;color:#085041}
+.ta{background:#FAEEDA;color:#633806} .tr{background:#FCEBEB;color:#791F1F}
+.tp{background:#EEEDFE;color:#3C3489} .tg{background:#EAF3DE;color:#27500A}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.row3{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:10px}
+.it{font-size:12px;color:var(--color-text-secondary);padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.6}
+.it:last-child{border-bottom:none}
+.hl{color:var(--color-text-primary);font-weight:500}
+.sc{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:8px 0 5px;padding-bottom:4px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;text-align:center}
+.sn{font-size:20px;font-weight:500;margin:0}
+.sl{font-size:10px;color:var(--color-text-secondary);margin:2px 0 0}
+.warn{background:#FAEEDA;border-radius:var(--border-radius-md);padding:7px 10px;font-size:11px;color:#633806;margin:6px 0}
+.good{background:#E1F5EE;border-radius:var(--border-radius-md);padding:7px 10px;font-size:11px;color:#085041;margin:6px 0}
+.quote{background:#E6F1FB;border-radius:0;border-left:3px solid #185FA5;padding:8px 12px;font-size:12px;color:#0C447C;margin:8px 0;font-style:italic;line-height:1.6}
+.arrow{color:var(--color-text-tertiary);font-size:16px;margin:0 4px}
+</style>
+
+<div style="padding:1rem 0;">
+
+<div class="card">
+  <span class="tag tb">Problem Statement</span>
+  <div class="row">
+    <div>
+      <p class="sc">The existing rule</p>
+      <div class="it"><span class="hl">Same-card ban:</span> if User A registers with Credit Card X, then User B cannot register with the same Credit Card X</div>
+      <div class="it"><span class="hl">Intent:</span> block fraudsters reactivating under a new user ID after being banned</div>
+      <div class="it"><span class="hl">Unintended consequence:</span> legitimate churned users who want to reactivate are blocked — their card is "on file" from their old account</div>
+    </div>
+    <div>
+      <p class="sc">The tension</p>
+      <div class="it"><span class="hl">Fraud prevention goal:</span> block bad actors from creating multiple accounts with one card</div>
+      <div class="it"><span class="hl">Growth goal:</span> allow legitimate returning customers to reactivate without friction</div>
+      <div class="it" style="color:#791F1F">These two goals directly conflict — the same rule that blocks fraud also blocks genuine reactivation</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tp">Hypothesis & Solution</span>
+  <div class="row">
+    <div>
+      <p class="sc">Root cause analysis</p>
+      <div class="it">When a user churns, their card information is kept on file (hard delete never happens)</div>
+      <div class="it">This means the card remains "claimed" by the churned account forever</div>
+      <div class="it">Any new account with the same card — even the same real person — is blocked</div>
+    </div>
+    <div>
+      <p class="sc">Proposed solution</p>
+      <div class="it"><span class="hl">Soft delete card on churn:</span> when a user churns, mark their card as soft-deleted (not hard-deleted)</div>
+      <div class="it">Soft-deleted card no longer blocks same-card ban rule during reactivation</div>
+      <div class="it">Downstream risk checks (Omni score, AVS, chargeback rules) still run — bad actors get caught by other signals</div>
+    </div>
+  </div>
+  <div class="quote">"We hypothesised that soft-deleting card information on churn would unblock legitimate reactivation without meaningfully increasing fraud, because downstream risk checks would catch bad actors who previously relied on card anonymity."</div>
+</div>
+
+<div class="card">
+  <span class="tag ta">Experiment Design</span>
+  <div class="row3">
+    <div>
+      <p class="sc">Setup</p>
+      <div class="it"><span class="hl">Duration:</span> 4 weeks</div>
+      <div class="it"><span class="hl">Unit:</span> User (reactivation attempt)</div>
+      <div class="it"><span class="hl">Treatment:</span> soft-delete card on churn → unblock reactivation</div>
+      <div class="it"><span class="hl">Control:</span> existing same-card ban rule (hard block)</div>
+      <div class="it"><span class="hl">Population:</span> churned users attempting reactivation with a previously-used card</div>
+    </div>
+    <div>
+      <p class="sc">Success metrics</p>
+      <div class="it"><span class="hl">Primary:</span> Net revenue (revenue minus fraud losses)</div>
+      <div class="it"><span class="hl">Conversion:</span> Onboard activation rate</div>
+      <div class="it"><span class="hl">Safety:</span> Chargeback rate</div>
+      <div class="it"><span class="hl">Safety:</span> ATO (Account Takeover) report rate</div>
+      <div class="it"><span class="hl">Downstream:</span> Omni risk score distribution</div>
+      <div class="it"><span class="hl">Downstream:</span> AVS (Address Verification) check pass rate</div>
+    </div>
+    <div>
+      <p class="sc">Risk mitigations pre-launch</p>
+      <div class="it">Downstream risk checks remain active for treatment group</div>
+      <div class="it">Omni score threshold set conservatively for reactivating users</div>
+      <div class="it">Real-time chargeback monitoring with auto-pause if spike detected</div>
+      <div class="it">Legal/Compliance pre-review of rule change</div>
+      <div class="it">Gradual rollout: 5% → 20% → 50% → 100%</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tt">Results (4-week experiment)</span>
+  <div class="row3" style="margin-bottom:12px">
+    <div class="stat">
+      <p class="sl">Net revenue</p>
+      <p class="sn" style="color:#085041">Positive</p>
+      <p class="sl">Primary metric — significant</p>
+    </div>
+    <div class="stat">
+      <p class="sl">Onboard activation rate</p>
+      <p class="sn" style="color:#085041">+5 BPS</p>
+      <p class="sl">~1,000 MTM incremental users</p>
+    </div>
+    <div class="stat">
+      <p class="sl">Downstream risk blocks</p>
+      <p class="sn" style="color:#0C447C">Active</p>
+      <p class="sl">Bad actors caught by Omni/AVS</p>
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <p class="sc">What worked</p>
+      <div class="it">Net revenue positive — legitimate reactivators generated incremental GMV</div>
+      <div class="it">+5 BPS activation rate = ~1,000 more activated users per month</div>
+      <div class="it">Downstream risk checks (Omni score, AVS) successfully filtered bad actors who tried to exploit the relaxed rule</div>
+      <div class="it">Chargeback rate and ATO rate held stable — no meaningful fraud uplift</div>
+    </div>
+    <div>
+      <p class="sc">Key insight</p>
+      <div class="it">The same-card ban was over-blocking: it was rejecting many legitimate returning customers</div>
+      <div class="it">Downstream risk signals (Omni, AVS) are more precise than a blanket card-level ban</div>
+      <div class="it">Soft delete is the right data lifecycle decision — permanent card retention creates false blocks</div>
+      <div class="it">Layered defense works better than a single blunt rule</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tr">Metrics Deep Dive — What Each One Measures</span>
+  <div class="row">
+    <div>
+      <p class="sc">Why net revenue is the right North Star</p>
+      <div class="it">Revenue alone would miss fraud cost — a bad actor completing onboarding looks like revenue</div>
+      <div class="it">Net revenue = revenue − expected fraud losses (chargebacks + ATO losses)</div>
+      <div class="it">Positive net revenue means the incremental legitimate users outweighed incremental fraud</div>
+      <div class="it" style="color:#085041">This is the right framing for any risk-relaxation experiment: the question is always net value, not gross conversion</div>
+    </div>
+    <div>
+      <p class="sc">Guardrail metric logic</p>
+      <div class="it"><span class="hl">Chargeback rate:</span> direct cost signal — if fraudsters reactivate and dispute charges, this spikes first</div>
+      <div class="it"><span class="hl">ATO report rate:</span> account takeover reports — signals if stolen credentials are being reused via the relaxed rule</div>
+      <div class="it"><span class="hl">Omni score:</span> downstream composite risk score — validates that relaxed entry-point is offset by tighter downstream</div>
+      <div class="it"><span class="hl">AVS check:</span> address verification — catches stolen cards where billing address doesn't match</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <span class="tag tp">Interview Soundbites</span>
+  <div class="quote">"The core insight was that a single blunt rule — same card, same ban — was doing too much work. It was trying to be both an identity check and a fraud signal. By soft-deleting cards on churn, we separated those two concerns: card identity no longer persists after churn, and downstream risk checks handle the fraud signal more precisely."</div>
+  <div class="quote">"Net revenue was the right primary metric because in risk-relaxation experiments, gross conversion is misleading. A fraudster who gets through looks like revenue until the chargeback. Net revenue forces you to account for fraud losses in the same metric, so the experiment can only succeed if legitimate users genuinely outweigh bad actors."</div>
+  <div class="quote">"The downstream risk checks weren't just guardrails — they were the enabler. The reason we could relax the entry-point rule was specifically because we had Omni score, AVS, and chargeback monitoring as a second layer. Without those, we couldn't have justified the relaxation. That's the layered defence principle: you can afford to be less blunt at the top of the funnel if you're more precise downstream."</div>
+</div>
+
+<div class="card">
+  <span class="tag ta">Anticipated Follow-up Questions</span>
+  <div class="it"><span class="hl">Q: How did you handle the fact that fraud signals are lagged?</span> Chargebacks can take 30-90 days to materialise. We set a conservative monitoring window and used leading indicators (AVS fail rate, velocity checks on new activations) as early signals before the 4-week experiment window closed.</div>
+  <div class="it"><span class="hl">Q: Why soft delete and not hard delete?</span> Hard delete would destroy the historical association permanently. Soft delete preserves the audit trail — if a user later files a dispute or if we need to investigate fraud, the card linkage history is still queryable.</div>
+  <div class="it"><span class="hl">Q: What is 5 BPS in context?</span> 5 basis points = 0.05% improvement in activation rate. At the scale of reactivation attempts, that translates to ~1,000 incremental activated users per month (MTM). Over a year, that's ~12,000 users and the associated revenue.</div>
+  <div class="it"><span class="hl">Q: What would cause you to roll back?</span> Three stopping criteria: chargeback rate exceeds 1.5x baseline, ATO report rate exceeds 2x baseline, or Omni score distribution for treatment group shifts meaningfully toward high-risk bucket.</div>
+  <div class="it"><span class="hl">Q: How did you validate the experiment wasn't contaminated by seasonal effects?</span> 4 weeks spans multiple billing cycles and controls for weekly seasonality. We also ran a pre-experiment AA test to confirm baseline comparability between treatment and control populations.</div>
+</div>
+
+<div style="text-align:center;margin-top:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+  <button onclick="sendPrompt('帮我深挖这个项目的chargeback rate和ATO rate的统计显著性问题')">深挖guardrail统计显著性 ↗</button>
+  <button onclick="sendPrompt('帮我用STAR格式整理这个项目的面试回答')">STAR格式整理 ↗</button>
+  <button onclick="sendPrompt('这个项目有没有什么我应该主动提到的风险或局限性')">主动坦白局限性 ↗</button>
+</div>
+
+</div>

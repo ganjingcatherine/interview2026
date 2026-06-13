@@ -1,0 +1,375 @@
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;">合规产品指标诊断表，含公式、拆解方法和解决方案</h2>
+<style>
+*{box-sizing:border-box}
+.tbl{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+.tbl th{background:var(--color-background-secondary);color:var(--color-text-secondary);font-weight:500;padding:7px 8px;text-align:left;border-bottom:1px solid var(--color-border-secondary);white-space:nowrap}
+.tbl td{padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);vertical-align:top;line-height:1.5}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--color-background-secondary)}
+.hl{color:var(--color-text-primary);font-weight:500}
+.mono{font-family:var(--font-mono);font-size:10px;background:var(--color-background-secondary);padding:1px 4px;border-radius:3px;color:var(--color-text-primary)}
+.badge{display:inline-block;font-size:10px;padding:1px 5px;border-radius:4px;font-weight:500;white-space:nowrap}
+.b0{background:#FCEBEB;color:#791F1F}
+.b1{background:#FAEEDA;color:#633806}
+.b2{background:#E1F5EE;color:#085041}
+.b3{background:#E6F1FB;color:#0C447C}
+.b4{background:#EAF3DE;color:#27500A}
+.warn{color:#791F1F;font-size:10px}
+.sec{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--color-border-secondary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:14px;overflow-x:auto}
+</style>
+
+<div style="padding:1rem 0;">
+
+<div class="card">
+<p class="sec" style="margin-top:0">P0 — 监管红线指标</p>
+<table class="tbl">
+<colgroup>
+  <col style="width:14%"><col style="width:18%"><col style="width:20%"><col style="width:24%"><col style="width:24%">
+</colgroup>
+<thead>
+<tr>
+  <th>指标</th><th>公式</th><th>目标 / 阈值</th><th>诊断拆解</th><th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="hl">CSAM上报合规率</span><br><span class="badge b0">P0</span></td>
+  <td><span class="mono">上报数(≤24h) / 检测总数</span></td>
+  <td><span class="hl">= 100%</span><br><span class="warn">任何&lt;100%触发法律风险</span></td>
+  <td>
+    分子↓ → 看哪个阶段延迟：<br>
+    · hash检测慢？→ 数据库延迟<br>
+    · 人工确认慢？→ 去掉人工步骤<br>
+    · NCMEC API慢？→ 重试机制
+  </td>
+  <td>
+    · 全自动流水线，不经过人工<br>
+    · P99延迟监控，内部目标&lt;6h<br>
+    · NCMEC API备用链路
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">COPPA合规率</span><br><span class="badge b0">P0</span></td>
+  <td><span class="mono">合规U13账号 / 总U13账号</span></td>
+  <td><span class="hl">= 100%</span></td>
+  <td>
+    分母突增 → 新注册U13激增<br>
+    分子缺失 → 家长同意流程失效<br>
+    · 按注册渠道拆（iOS/Android/Web）<br>
+    · 按注册时间拆（有没有产品改动）
+  </td>
+  <td>
+    · 修复家长同意流程bug<br>
+    · 年龄门槛强制校验<br>
+    · 异常账号人工审查队列
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">监管投诉响应率</span><br><span class="badge b0">P0</span></td>
+  <td><span class="mono">30天内回复数 / 总投诉数</span></td>
+  <td><span class="hl">&gt; 99%</span></td>
+  <td>
+    按投诉类型拆（数据请求/内容投诉）<br>
+    按地区拆（哪个监管机构）<br>
+    按投诉时间拆（有没有积压）
+  </td>
+  <td>
+    · 自动分流到对应Legal团队<br>
+    · 7天预警触发升级<br>
+    · 季度容量规划
+  </td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<p class="sec" style="margin-top:0">P1 — 安全有效性指标</p>
+<table class="tbl">
+<colgroup>
+  <col style="width:14%"><col style="width:18%"><col style="width:20%"><col style="width:24%"><col style="width:24%">
+</colgroup>
+<thead>
+<tr>
+  <th>指标</th><th>公式</th><th>目标 / 阈值</th><th>诊断拆解</th><th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="hl">有害内容曝光率</span><br><span class="badge b1">P1</span></td>
+  <td><span class="mono">有害印象数 / 总印象数</span><br><br>分层：<br><span class="mono">按U13/13-15/16-17</span></td>
+  <td>每季度持续下降<br><br><span class="warn">突增&gt;20%触发紧急响应</span></td>
+  <td>
+    <span class="hl">分子↑：</span><br>
+    · 按内容类别拆 → 哪类爆发？<br>
+    · 被举报内容的分数分布<br>
+    &nbsp;&nbsp;低分(0-30) → 模型漏检<br>
+    &nbsp;&nbsp;高分(70+) → 阈值/人审问题<br>
+    <span class="hl">分母↓：</span><br>
+    · 总内容量下降（产品问题）<br>
+    · 特定年龄段用户流失
+  </td>
+  <td>
+    低分集中 → 重训练模型<br>
+    高分放过 → 下调阈值/培训审核员<br>
+    新类别涌入 → 更新训练数据<br>
+    临时：降低阈值+扩人力
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">骚扰举报率</span><br><span class="badge b1">P1</span></td>
+  <td><span class="mono">骚扰举报数 / 活跃用户数</span><br><br>配合：<br><span class="mono">举报后行动率</span></td>
+  <td>合规功能上线后<br>下降≥30%<br><br><span class="warn">陷阱：下降≠骚扰减少</span></td>
+  <td>
+    <span class="hl">举报率↓，同时看：</span><br>
+    · 举报后行动率是否同步↓？<br>
+    &nbsp;&nbsp;是 → 用户放弃举报（坏）<br>
+    &nbsp;&nbsp;否 → 真实骚扰减少（好）<br>
+    · 重复骚扰率是否↑？<br>
+    · 按举报入口拆（哪个按钮）<br>
+    · 按举报类型拆（私信/评论/账号）
+  </td>
+  <td>
+    用户放弃举报 → 优化举报UI入口<br>
+    行动率低 → 提升处理速度和透明度<br>
+    特定入口失效 → bug修复
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">陌生人接触率</span><br><span class="badge b1">P1</span></td>
+  <td><span class="mono">非好友互动数 / 总互动数</span><br><br>非好友：评论+私信+点赞</td>
+  <td>仅好友政策上线后<br>下降≥50%</td>
+  <td>
+    · 按互动类型拆（评论/私信/点赞）<br>
+    · 按内容类型拆（哪类视频吸引陌生人）<br>
+    · 看opt-out率：是否有用户关掉了设置<br>
+    · 看账号创建时间：新账号vs老账号
+  </td>
+  <td>
+    Opt-out率高 → 改进设置UI和通知<br>
+    特定内容类型 → 加强该类推荐限制<br>
+    新账号问题 → 强化onboarding默认设置
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">CGVR检测准确率</span><br><span class="badge b1">P1</span></td>
+  <td><span class="mono">Recall = TP/(TP+FN)</span><br><span class="mono">Precision = TP/(TP+FP)</span><br><br>用账号行为序列，不是单条内容</td>
+  <td>Recall ≥ 90%<br>Precision ≥ 30%<br><br>偏重Recall</td>
+  <td>
+    Recall↓ → 哪类诱骗手法未被检测？<br>
+    · 新型接触方式（游戏/直播）<br>
+    · 语言变体（暗语/表情）<br>
+    Precision↓ → 误报哪类账号？<br>
+    · 正常成年粉丝被误判<br>
+    · 特定地区文化差异
+  </td>
+  <td>
+    Recall不足 → 更新序列模型训练数据<br>
+    Precision太低 → 加人工复核层<br>
+    新手法 → 红队持续更新seed set
+  </td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<p class="sec" style="margin-top:0">P2 — 用户体验指标</p>
+<table class="tbl">
+<colgroup>
+  <col style="width:14%"><col style="width:18%"><col style="width:20%"><col style="width:24%"><col style="width:24%">
+</colgroup>
+<thead>
+<tr>
+  <th>指标</th><th>公式</th><th>目标 / 阈值</th><th>诊断拆解</th><th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="hl">Opt-out率</span><br><span class="badge b2">P2</span></td>
+  <td><span class="mono">主动关闭人数 / 强制开启人数</span></td>
+  <td>&lt; 20%<br><br><span class="warn">&gt;40% 需立即介入</span></td>
+  <td>
+    · 按时间拆：突变（改版）vs渐变（习惯）<br>
+    · 按用户群拆：重度用户opt-out多 → 功能影响核心体验<br>
+    · 看关闭后行为：session↑说明确实被限制了<br>
+    · 看关闭时的上下文：看了什么内容后关闭？
+  </td>
+  <td>
+    突变 → 找改版节点，回滚或修复<br>
+    重度用户 → 提供差异化设置选项<br>
+    全量高 → 重新设计通知和沟通策略
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">D30 retention对比</span><br><span class="badge b2">P2</span></td>
+  <td><span class="mono">retention(opted_in) vs retention(opted_out)</span><br><br>注意：opt-out是自选择，需控制混淆</td>
+  <td>opted_in ≥ opted_out<br>（合规产品不损害留存）</td>
+  <td>
+    · 先控制用户特征（年龄/使用时长/内容偏好）<br>
+    · 如果opted_in明显低 → 功能确实损害体验<br>
+    · 拆解流失在哪天（D7/D14/D30）<br>
+    · 按内容类型看：哪类用户流失最多？
+  </td>
+  <td>
+    D7就开始分叉 → onboarding体验问题<br>
+    D14-D30分叉 → 内容推荐质量问题<br>
+    用CUPED控制实验前行为差异
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">好友互动率</span><br><span class="badge b2">P2</span></td>
+  <td><span class="mono">好友间互动数 / 总互动数</span></td>
+  <td>仅好友政策后上升<br>或至少持平</td>
+  <td>
+    · 如果连好友互动也↓ → 内容推荐质量问题<br>
+    · 按互动类型拆（评论/点赞/duet）<br>
+    · 按好友关系深度拆（互关时长）<br>
+    · 看内容多样性分数是否同步下降
+  </td>
+  <td>
+    好友互动↓ → 优化好友内容推荐权重<br>
+    内容多样性↓ → 调整推荐算法多样性参数
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">家长满意度NPS</span><br><span class="badge b2">P2</span></td>
+  <td><span class="mono">NPS = %推荐者 - %批评者</span><br><br>季度调查</td>
+  <td>NPS &gt; 30<br><br>是监管信任的领先指标</td>
+  <td>
+    · 按家长年龄/地区拆<br>
+    · 看NPS驱动因素分析（哪些功能影响评分）<br>
+    · 对比竞品NPS<br>
+    · 看低分用户的具体反馈主题
+  </td>
+  <td>
+    低分主因：不知道有哪些控制工具 → 改善家长dashboard可见性<br>
+    低分主因：功能太复杂 → 简化设置流程
+  </td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<p class="sec" style="margin-top:0">P3 — 系统健康指标</p>
+<table class="tbl">
+<colgroup>
+  <col style="width:14%"><col style="width:18%"><col style="width:20%"><col style="width:24%"><col style="width:24%">
+</colgroup>
+<thead>
+<tr>
+  <th>指标</th><th>公式</th><th>目标 / 阈值</th><th>诊断拆解</th><th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="hl">模型AUC</span><br><span class="badge b3">P3</span></td>
+  <td><span class="mono">roc_auc_score(y_true, y_scores)</span><br><br>在红队种子集上每周计算</td>
+  <td>稳定<br>下降&gt;0.03 → 重训练<br><br>每周监控</td>
+  <td>
+    · 按内容类别拆AUC（哪类下降最多）<br>
+    · 对比不同模型版本（V1 vs V2）<br>
+    · 检查红队种子集是否过期（要定期更新）<br>
+    · 看是不是数据分布漂移（新型内容）
+  </td>
+  <td>
+    特定类别下降 → 针对该类补充训练数据<br>
+    全局下降 → 全面重训练<br>
+    种子集过期 → 红队更新seed set
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">申诉推翻率</span><br><span class="badge b3">P3</span></td>
+  <td><span class="mono">被推翻申诉数 / 总申诉数</span></td>
+  <td>&lt; 15%<br><br>&gt;15%连续2周 → 重训练</td>
+  <td>
+    · 按内容类别拆 → 哪类推翻率最高？<br>
+    · 按分数段拆 → 高分段推翻多 → 阈值太低<br>
+    · 按时间拆 → 某周突增 → 找模型更新节点<br>
+    · 看推翻理由分布 → "误报"vs"上下文理解错"
+  </td>
+  <td>
+    特定类别高 → 重标注该类数据<br>
+    高分段高 → 上调自动拦截阈值<br>
+    上下文理解错 → 引入更多上下文特征
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">千人标样漏审率</span><br><span class="badge b3">P3</span></td>
+  <td><span class="mono">低分段人审发现有害数 / 1000</span><br><br>每周从score&lt;阈值随机抽</td>
+  <td>&lt; 3%<br><br>&gt;5%连续2周 → 下调阈值</td>
+  <td>
+    · 按分数段拆（20-25 vs 25-30）<br>
+    · 按内容类别拆（哪类漏审最多）<br>
+    · 按时间拆（漏审率是突变还是渐变）<br>
+    · 计算需要多少额外人力才能覆盖
+  </td>
+  <td>
+    漏审集中在某类 → 针对性重训练<br>
+    漏审率渐增 → 模型漂移，触发重训练<br>
+    临时：降低阈值+扩人力（计算额外成本）
+  </td>
+</tr>
+<tr>
+  <td><span class="hl">人审产能利用率</span><br><span class="badge b3">P3</span></td>
+  <td><span class="mono">日送审量 / (人数×人均日产能)</span></td>
+  <td>健康：70-90%<br><br><span class="warn">&gt;95% → 疲劳风险</span><br>&lt;60% → 资源浪费</td>
+  <td>
+    利用率&gt;95%：<br>
+    · 日送审量↑ → 阈值被调低？内容量激增？<br>
+    · 人数↓ → 离职/请假？<br>
+    · 同时看IAA → 是否已经下降？<br>
+    利用率&lt;60%：<br>
+    · 阈值太高 → 漏审率是否上升？<br>
+    · DAU下降导致内容减少？
+  </td>
+  <td>
+    &gt;95% → 临时扩招+调高阈值减少队列<br>
+    &lt;60% → 下调阈值发现更多有害内容<br>
+    长期 → 根据内容量预测做产能规划
+  </td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<p class="sec" style="margin-top:0">通用诊断口诀</p>
+<table class="tbl">
+<colgroup>
+  <col style="width:20%"><col style="width:80%">
+</colgroup>
+<tbody>
+<tr>
+  <td><span class="hl">Step 1: 分子/分母</span></td>
+  <td>先分开画趋势图。是真实变化还是基数变化？分母变大了导致率下降不是好事。</td>
+</tr>
+<tr>
+  <td><span class="hl">Step 2: 时间维度</span></td>
+  <td>突变（找那天发生了什么：改版/事件/模型更新）vs 渐变（慢性系统性问题）</td>
+</tr>
+<tr>
+  <td><span class="hl">Step 3: 分层拆解</span></td>
+  <td>年龄段 / 内容类别 / 地区 / 用户群体 / 分数段。全局平均值会掩盖严重的局部问题。</td>
+</tr>
+<tr>
+  <td><span class="hl">Step 4: 交叉验证</span></td>
+  <td>单一指标异常可能是测量问题。多个指标同向异常才是真实问题。配合指标相互验证。</td>
+</tr>
+<tr>
+  <td><span class="hl">Step 5: 归因</span></td>
+  <td>模型问题（重训练）/ 阈值问题（调整）/ 产品问题（UI优化）/ 外部冲击（扩容或接受）</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div style="text-align:center;margin-top:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+  <button onclick="sendPrompt('给我一道指标诊断的模拟面试题')">指标诊断模拟题 ↗</button>
+  <button onclick="sendPrompt('把这个指标表格加进复习提纲文件')">加进提纲文件 ↗</button>
+</div>
+
+</div>
