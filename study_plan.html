@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>30-Day AI Study Plan</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fa;
+      color: #1a1a2e;
+      padding: 40px 24px;
+    }
+    .container { max-width: 860px; margin: 0 auto; }
+    h1 { font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+    .meta { font-size: 13px; color: #64748b; margin-bottom: 32px; }
+    .progress-bar-wrap {
+      background: #e2e8f0; border-radius: 99px; height: 10px; margin-bottom: 8px;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      height: 10px; border-radius: 99px; transition: width 0.3s;
+      width: 0%;
+    }
+    .progress-label { font-size: 12px; color: #64748b; margin-bottom: 32px; }
+
+    .week-header {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #fff;
+      padding: 8px 14px; border-radius: 8px 8px 0 0;
+      margin-top: 28px;
+    }
+    .week-1 .week-header { background: #6366f1; }
+    .week-2 .week-header { background: #0ea5e9; }
+    .week-3 .week-header { background: #10b981; }
+    .week-4 .week-header { background: #f59e0b; }
+
+    .week-block { background: #fff; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; margin-bottom: 4px; }
+
+    .day-row {
+      display: grid;
+      grid-template-columns: 44px 90px 1fr 1fr;
+      border-bottom: 1px solid #f1f5f9;
+      align-items: start;
+      padding: 12px 14px;
+      gap: 10px;
+      transition: background 0.15s;
+    }
+    .day-row:last-child { border-bottom: none; }
+    .day-row:hover { background: #fafafa; }
+    .day-row.done { background: #f0fdf4; }
+
+    .day-check { display: flex; align-items: flex-start; padding-top: 2px; }
+    .day-check input[type=checkbox] {
+      width: 16px; height: 16px; accent-color: #6366f1; cursor: pointer; flex-shrink: 0;
+    }
+    .day-label {
+      font-size: 12px; font-weight: 700; color: #475569;
+      padding-top: 2px;
+    }
+    .day-date { font-size: 11px; color: #94a3b8; }
+
+    .col-header {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #94a3b8;
+    }
+    .cell-label { font-size: 12px; font-weight: 600; color: #0f172a; margin-bottom: 4px; }
+    .cell-items { list-style: none; }
+    .cell-items li { font-size: 12px; color: #475569; line-height: 1.6; padding-left: 10px; position: relative; }
+    .cell-items li::before { content: "·"; position: absolute; left: 0; color: #94a3b8; }
+    .cell-items a { color: #6366f1; text-decoration: none; font-size: 11px; }
+    .cell-items a:hover { text-decoration: underline; }
+
+    .tag {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      padding: 1px 6px; border-radius: 4px; margin-bottom: 4px;
+    }
+    .tag-course { background: #eff6ff; color: #1d4ed8; }
+    .tag-project { background: #fdf4ff; color: #7e22ce; }
+    .tag-practice { background: #fef3c7; color: #92400e; }
+    .tag-capstone { background: #ecfdf5; color: #065f46; }
+
+    .courses-index {
+      margin-top: 36px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px 24px;
+    }
+    .courses-index h2 { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: #0f172a; }
+    .course-link-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13px;
+    }
+    .course-link-row:last-child { border-bottom: none; }
+    .course-link-row a { color: #6366f1; text-decoration: none; font-weight: 500; }
+    .course-link-row a:hover { text-decoration: underline; }
+    .enroll-btn {
+      margin-left: auto;
+      font-size: 11px; font-weight: 600;
+      background: #6366f1; color: #fff;
+      padding: 3px 10px; border-radius: 5px;
+      text-decoration: none !important;
+      white-space: nowrap;
+    }
+    .enroll-btn:hover { background: #4f46e5; }
+
+    .header-row {
+      display: grid;
+      grid-template-columns: 44px 90px 1fr 1fr;
+      padding: 6px 14px;
+      gap: 10px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>30-Day AI Learning Plan</h1>
+  <p class="meta">Start: June 14, 2026 &nbsp;·&nbsp; 2 hrs/day &nbsp;·&nbsp; 1.5 hrs course + 30 min project &nbsp;·&nbsp; Project: Biography Writer</p>
+
+  <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 30 days completed</div>
+
+  <!-- COURSES INDEX -->
+  <div class="courses-index">
+    <h2>Course Links — Register First</h2>
+    <div class="course-link-row">
+      <span>📘</span>
+      <a href="https://anthropic.skilljar.com/claude-platform-101" target="_blank">Claude Platform 101</a>
+      <a class="enroll-btn" href="https://anthropic.skilljar.com/checkout/dykpvfec8suq" target="_blank">Enroll Free</a>
+    </div>
+    <div class="course-link-row">
+      <span>⚙️</span>
+      <a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank">Building with the Claude API</a>
+      <a class="enroll-btn" href="https://anthropic.skilljar.com/checkout/305062qjiqhmq" target="_blank">Enroll Free</a>
+    </div>
+    <div class="course-link-row">
+      <span>🔌</span>
+      <a href="https://anthropic.skilljar.com/introduction-to-model-context-protocol" target="_blank">Introduction to MCP</a>
+      <a class="enroll-btn" href="https://anthropic.skilljar.com/checkout/2a7vyqna2ds2p" target="_blank">Enroll Free</a>
+    </div>
+    <div class="course-link-row">
+      <span>🚀</span>
+      <a href="https://anthropic.skilljar.com/model-context-protocol-advanced-topics" target="_blank">MCP: Advanced Topics</a>
+      <a class="enroll-btn" href="https://anthropic.skilljar.com/checkout/2vmkyo1704pa8" target="_blank">Enroll Free</a>
+    </div>
+    <div class="course-link-row">
+      <span>🧩</span>
+      <a href="https://anthropic.skilljar.com/introduction-to-agent-skills" target="_blank">Introduction to Agent Skills</a>
+      <a class="enroll-btn" href="https://anthropic.skilljar.com/checkout/3qmto78bpdsi1" target="_blank">Enroll Free</a>
+    </div>
+    <div class="course-link-row">
+      <span>🤖</span>
+      <a href="https://anthropic.skilljar.com/introduction-to-subagents" target="_blank">Introduction to Subagents</a>
+      <a class="enroll-btn" href="https://anthropic.skilljar.com/checkout/2ekik7yjcypt1" target="_blank">Enroll Free</a>
+    </div>
+    <div class="course-link-row">
+      <span>💻</span>
+      <a href="https://anthropic.skilljar.com/claude-code-in-action" target="_blank">Claude Code in Action</a>
+      <a class="enroll-btn" href="https://anthropic.skilljar.com/checkout/2lhme7jpf2r85" target="_blank">Enroll Free</a>
+    </div>
+    <div class="course-link-row">
+      <span>🎥</span>
+      <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY" target="_blank">Karpathy: GPT from Scratch (YouTube)</a>
+    </div>
+    <div class="course-link-row">
+      <span>📄</span>
+      <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank">Anthropic Prompt Engineering Docs</a>
+    </div>
+  </div>
+
+  <!-- WEEK 1 -->
+  <div class="week-1">
+    <div class="week-header">Week 1 — Platform Foundation + Project Setup (June 14–20)</div>
+    <div class="week-block">
+      <div class="header-row">
+        <div></div>
+        <div class="col-header">Date</div>
+        <div class="col-header">Course (1.5 hr)</div>
+        <div class="col-header">Project (30 min)</div>
+      </div>
+
+      <div class="day-row" id="day-1">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-1',this)"></div>
+        <div><div class="day-label">Day 1</div><div class="day-date">Jun 14</div></div>
+        <div>
+          <div class="tag tag-course">Claude Platform 101</div>
+          <ul class="cell-items">
+            <li>What is the Developer Platform</li>
+            <li>Your first API call</li>
+            <li>Choosing the right model</li>
+            <li><a href="https://anthropic.skilljar.com/claude-platform-101" target="_blank">→ Open course</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Create GitHub repo for Biography Writer</li>
+            <li>Draft your 50 interview questions</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-2">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-2',this)"></div>
+        <div><div class="day-label">Day 2</div><div class="day-date">Jun 15</div></div>
+        <div>
+          <div class="tag tag-course">Claude Platform 101</div>
+          <ul class="cell-items">
+            <li>Agent loop explained</li>
+            <li>What is tool use?</li>
+            <li>What is thinking?</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Sketch user flow: intake → questions → generation → output</li>
+            <li>Group 50 questions into 5 chapters (childhood, career, values, legacy, future)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-3">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-3',this)"></div>
+        <div><div class="day-label">Day 3</div><div class="day-date">Jun 16</div></div>
+        <div>
+          <div class="tag tag-course">Claude Platform 101</div>
+          <ul class="cell-items">
+            <li>Built-in tools</li>
+            <li>Skills · MCP · Context management</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Build CLI question intake loop in Python</li>
+            <li>Save answers to JSON file</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-4">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-4',this)"></div>
+        <div><div class="day-label">Day 4</div><div class="day-date">Jun 17</div></div>
+        <div>
+          <div class="tag tag-course">Claude Platform 101</div>
+          <ul class="cell-items">
+            <li>What are managed agents?</li>
+            <li>Building your first managed agent</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Wire Claude API to read answers and generate a rough bio</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-5">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-5',this)"></div>
+        <div><div class="day-label">Day 5</div><div class="day-date">Jun 18</div></div>
+        <div>
+          <div class="tag tag-course">Claude Platform 101</div>
+          <ul class="cell-items">
+            <li>Building with Claude Code module</li>
+            <li>Claude Platform 101 Quiz</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Generate a draft bio from 5 answers — iterate on the system prompt</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-6">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-6',this)"></div>
+        <div><div class="day-label">Day 6</div><div class="day-date">Jun 19</div></div>
+        <div>
+          <div class="tag tag-course">Karpathy</div>
+          <ul class="cell-items">
+            <li><a href="https://www.youtube.com/watch?v=kCc8FmEb1nY" target="_blank">→ GPT from Scratch (YouTube)</a> — watch for intuition, skip the math</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Refine 50 questions — test them on yourself</li>
+            <li>Improve chapter grouping based on output quality</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-7">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-7',this)"></div>
+        <div><div class="day-label">Day 7</div><div class="day-date">Jun 20</div></div>
+        <div>
+          <div class="tag tag-practice">Review</div>
+          <ul class="cell-items">
+            <li>Review Week 1 notes</li>
+            <li><a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank">→ Read Anthropic Prompt Engineering Docs</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Improve system prompt using what you learned</li>
+            <li>Generate a full bio from all 50 answers (CLI version)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week-2">
+    <div class="week-header">Week 2 — API Deep Dive + Core Bio Logic (June 21–27)</div>
+    <div class="week-block">
+      <div class="header-row">
+        <div></div>
+        <div class="col-header">Date</div>
+        <div class="col-header">Course (1.5 hr)</div>
+        <div class="col-header">Project (30 min)</div>
+      </div>
+
+      <div class="day-row" id="day-8">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-8',this)"></div>
+        <div><div class="day-label">Day 8</div><div class="day-date">Jun 21</div></div>
+        <div>
+          <div class="tag tag-course">Claude API</div>
+          <ul class="cell-items">
+            <li>Auth, requests, model selection</li>
+            <li>Streaming responses</li>
+            <li><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank">→ Open course</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Add streaming output to bio generation so text appears in real time</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-9">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-9',this)"></div>
+        <div><div class="day-label">Day 9</div><div class="day-date">Jun 22</div></div>
+        <div>
+          <div class="tag tag-course">Claude API</div>
+          <ul class="cell-items">
+            <li>Tool use in depth — defining tools</li>
+            <li>Parsing results, multi-turn tool loops</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Build chapter-by-chapter generation (not one giant prompt)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-10">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-10',this)"></div>
+        <div><div class="day-label">Day 10</div><div class="day-date">Jun 23</div></div>
+        <div>
+          <div class="tag tag-course">Claude API</div>
+          <ul class="cell-items">
+            <li>Prompt engineering at scale</li>
+            <li>System prompts, few-shot examples</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Write chapter-level system prompts (tone: warm, narrative, first-person)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-11">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-11',this)"></div>
+        <div><div class="day-label">Day 11</div><div class="day-date">Jun 24</div></div>
+        <div>
+          <div class="tag tag-course">Claude API</div>
+          <ul class="cell-items">
+            <li>Long context handling</li>
+            <li>Token counting, prompt caching</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Handle all 50 answers without hitting context limits</li>
+            <li>Add token count logging</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-12">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-12',this)"></div>
+        <div><div class="day-label">Day 12</div><div class="day-date">Jun 25</div></div>
+        <div>
+          <div class="tag tag-course">Claude API</div>
+          <ul class="cell-items">
+            <li>Error handling, retries, rate limits</li>
+            <li>Production patterns</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Add retry logic</li>
+            <li>Save progress so users can resume mid-session</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-13">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-13',this)"></div>
+        <div><div class="day-label">Day 13</div><div class="day-date">Jun 26</div></div>
+        <div>
+          <div class="tag tag-course">Claude API</div>
+          <ul class="cell-items">
+            <li>Course wrap-up + quiz</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Generate a complete bio end-to-end from 50 answers</li>
+            <li>Export to markdown file</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-14">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-14',this)"></div>
+        <div><div class="day-label">Day 14</div><div class="day-date">Jun 27</div></div>
+        <div>
+          <div class="tag tag-practice">Practice (Perplexity Demo)</div>
+          <ul class="cell-items">
+            <li>Build a data agent: takes a business question → writes SQL → returns plain English answer</li>
+            <li>Use your own Snowflake or a mock dataset</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Think about web UI — sketch the 3 screens: questions form, loading, result</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week-3">
+    <div class="week-header">Week 3 — MCP: Make Your Warehouse AI-Readable + Web UI (June 28 – July 4)</div>
+    <div class="week-block">
+      <div class="header-row">
+        <div></div>
+        <div class="col-header">Date</div>
+        <div class="col-header">Course (1.5 hr)</div>
+        <div class="col-header">Project (30 min)</div>
+      </div>
+
+      <div class="day-row" id="day-15">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-15',this)"></div>
+        <div><div class="day-label">Day 15</div><div class="day-date">Jun 28</div></div>
+        <div>
+          <div class="tag tag-course">Intro MCP</div>
+          <ul class="cell-items">
+            <li>Welcome · Introducing MCP · MCP clients</li>
+            <li>Project setup</li>
+            <li><a href="https://anthropic.skilljar.com/introduction-to-model-context-protocol" target="_blank">→ Open course</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Start Flask/FastAPI web frontend</li>
+            <li>Build question form for questions 1–10</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-16">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-16',this)"></div>
+        <div><div class="day-label">Day 16</div><div class="day-date">Jun 29</div></div>
+        <div>
+          <div class="tag tag-course">Intro MCP</div>
+          <ul class="cell-items">
+            <li>Defining tools with MCP</li>
+            <li>The server inspector</li>
+            <li>Implementing a client</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Store user sessions (SQLite or JSON)</li>
+            <li>Extend form to questions 11–30</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-17">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-17',this)"></div>
+        <div><div class="day-label">Day 17</div><div class="day-date">Jun 30</div></div>
+        <div>
+          <div class="tag tag-course">Intro MCP</div>
+          <ul class="cell-items">
+            <li>Defining resources · Accessing resources</li>
+            <li>Defining prompts · Prompts in the client</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Complete form for all 50 questions</li>
+            <li>Add progress indicator (e.g. "Question 12 of 50")</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-18">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-18',this)"></div>
+        <div><div class="day-label">Day 18</div><div class="day-date">Jul 1</div></div>
+        <div>
+          <div class="tag tag-course">Intro MCP</div>
+          <ul class="cell-items">
+            <li>Final assessment on MCP</li>
+            <li>MCP review</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Connect form submission to Claude API</li>
+            <li>Stream bio output to the web page</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-19">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-19',this)"></div>
+        <div><div class="day-label">Day 19</div><div class="day-date">Jul 2</div></div>
+        <div>
+          <div class="tag tag-practice">Practice</div>
+          <ul class="cell-items">
+            <li>Build MCP server exposing dbt model metadata as a resource</li>
+            <li>Directly relevant to Perplexity interview</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Add "regenerate this chapter" button</li>
+            <li>Polish the streaming UI</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-20">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-20',this)"></div>
+        <div><div class="day-label">Day 20</div><div class="day-date">Jul 3</div></div>
+        <div>
+          <div class="tag tag-course">Advanced MCP</div>
+          <ul class="cell-items">
+            <li>Sampling · Sampling walkthrough</li>
+            <li>Log & progress notifications · Notifications walkthrough</li>
+            <li><a href="https://anthropic.skilljar.com/model-context-protocol-advanced-topics" target="_blank">→ Open course</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Add PDF download (weasyprint or reportlab)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-21">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-21',this)"></div>
+        <div><div class="day-label">Day 21</div><div class="day-date">Jul 4</div></div>
+        <div>
+          <div class="tag tag-course">Advanced MCP</div>
+          <ul class="cell-items">
+            <li>Roots · Roots walkthrough</li>
+            <li>JSON message types · STDIO transport</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Add style selector: Memoir / Professional / Legacy Letter</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-22">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-22',this)"></div>
+        <div><div class="day-label">Day 22</div><div class="day-date">Jul 5</div></div>
+        <div>
+          <div class="tag tag-course">Advanced MCP</div>
+          <ul class="cell-items">
+            <li>StreamableHTTP transport · In depth</li>
+            <li>State and StreamableHTTP · Assessment</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Polish UI end-to-end — mobile friendly</li>
+            <li>Test with a friend's answers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week-4">
+    <div class="week-header">Week 4 — Agents, Skills, Claude Code + Launch (July 6–13)</div>
+    <div class="week-block">
+      <div class="header-row">
+        <div></div>
+        <div class="col-header">Date</div>
+        <div class="col-header">Course (1.5 hr)</div>
+        <div class="col-header">Project (30 min)</div>
+      </div>
+
+      <div class="day-row" id="day-23">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-23',this)"></div>
+        <div><div class="day-label">Day 23</div><div class="day-date">Jul 6</div></div>
+        <div>
+          <div class="tag tag-course">Agent Skills</div>
+          <ul class="cell-items">
+            <li>What are skills · Creating your first skill</li>
+            <li>Configuration & multi-file skills</li>
+            <li><a href="https://anthropic.skilljar.com/introduction-to-agent-skills" target="_blank">→ Open course</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Write a Claude skill for the bio writer workflow</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-24">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-24',this)"></div>
+        <div><div class="day-label">Day 24</div><div class="day-date">Jul 7</div></div>
+        <div>
+          <div class="tag tag-course">Agent Skills</div>
+          <ul class="cell-items">
+            <li>Skills vs. CLAUDE.md / hooks / subagents</li>
+            <li>Sharing skills · Troubleshooting</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Write CLAUDE.md for the bio writer repo</li>
+            <li>Document how to run the project</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-25">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-25',this)"></div>
+        <div><div class="day-label">Day 25</div><div class="day-date">Jul 8</div></div>
+        <div>
+          <div class="tag tag-course">Subagents</div>
+          <ul class="cell-items">
+            <li>What are subagents · Creating a subagent</li>
+            <li><a href="https://anthropic.skilljar.com/introduction-to-subagents" target="_blank">→ Open course</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Split bio generation into subagents per chapter</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-26">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-26',this)"></div>
+        <div><div class="day-label">Day 26</div><div class="day-date">Jul 9</div></div>
+        <div>
+          <div class="tag tag-course">Subagents</div>
+          <ul class="cell-items">
+            <li>Designing effective subagents</li>
+            <li>Using subagents effectively</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Add a subagent that checks consistency across chapters (names, dates)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-27">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-27',this)"></div>
+        <div><div class="day-label">Day 27</div><div class="day-date">Jul 10</div></div>
+        <div>
+          <div class="tag tag-course">Claude Code in Action</div>
+          <ul class="cell-items">
+            <li>Intro · Setup · Adding context · Making changes</li>
+            <li>Controlling context · Custom commands</li>
+            <li><a href="https://anthropic.skilljar.com/claude-code-in-action" target="_blank">→ Open course</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Set up Claude Code in the bio writer repo</li>
+            <li>Use it to refactor the generation code</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-28">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-28',this)"></div>
+        <div><div class="day-label">Day 28</div><div class="day-date">Jul 11</div></div>
+        <div>
+          <div class="tag tag-course">Claude Code in Action</div>
+          <ul class="cell-items">
+            <li>MCP with Claude Code · GitHub integration</li>
+            <li>Hooks · Claude Code SDK · Wrap-up quiz</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-project">Bio Writer</div>
+          <ul class="cell-items">
+            <li>Add GitHub Action for linting on push</li>
+            <li>Final bug fixes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-29">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-29',this)"></div>
+        <div><div class="day-label">Day 29</div><div class="day-date">Jul 12</div></div>
+        <div>
+          <div class="tag tag-practice">Review + RAG</div>
+          <ul class="cell-items">
+            <li>Review all 4 weeks — close any incomplete lessons</li>
+            <li>Watch Karpathy RAG video for next project context</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-capstone">Launch</div>
+          <ul class="cell-items">
+            <li>Deploy to Render or Railway (free tier)</li>
+            <li>Get a live public URL</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" id="day-30">
+        <div class="day-check"><input type="checkbox" onchange="toggleDay('day-30',this)"></div>
+        <div><div class="day-label">Day 30</div><div class="day-date">Jul 13</div></div>
+        <div>
+          <div class="tag tag-capstone">Capstone</div>
+          <ul class="cell-items">
+            <li>Record 2-min Loom demo of the bio writer</li>
+            <li>Write LinkedIn post: "I built a biography writer with Claude API in 30 days"</li>
+          </ul>
+        </div>
+        <div>
+          <div class="tag tag-capstone">Next: Project 2</div>
+          <ul class="cell-items">
+            <li>Plan the Daily Learning Recommender (Perplexity-aligned project)</li>
+            <li>Outline the RAG + recommendation architecture</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function toggleDay(id, checkbox) {
+    const row = document.getElementById(id);
+    if (checkbox.checked) {
+      row.classList.add('done');
+    } else {
+      row.classList.remove('done');
+    }
+    saveProgress();
+    updateProgress();
+  }
+
+  function saveProgress() {
+    const state = {};
+    for (let i = 1; i <= 30; i++) {
+      const cb = document.querySelector(`#day-${i} input[type=checkbox]`);
+      if (cb) state[`day-${i}`] = cb.checked;
+    }
+    localStorage.setItem('studyPlanProgress', JSON.stringify(state));
+  }
+
+  function loadProgress() {
+    const saved = localStorage.getItem('studyPlanProgress');
+    if (!saved) return;
+    const state = JSON.parse(saved);
+    for (const [id, checked] of Object.entries(state)) {
+      const cb = document.querySelector(`#${id} input[type=checkbox]`);
+      if (cb) {
+        cb.checked = checked;
+        if (checked) document.getElementById(id).classList.add('done');
+      }
+    }
+  }
+
+  function updateProgress() {
+    let done = 0;
+    for (let i = 1; i <= 30; i++) {
+      const cb = document.querySelector(`#day-${i} input[type=checkbox]`);
+      if (cb && cb.checked) done++;
+    }
+    const pct = Math.round((done / 30) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `${done} / 30 days completed (${pct}%)`;
+  }
+
+  loadProgress();
+  updateProgress();
+</script>
+</body>
+</html>
